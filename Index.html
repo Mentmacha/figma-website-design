@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth [scroll-behavior:smooth] motion-reduce:[scroll-behavior:auto]" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Track Loc8 | Smart Vehicle Tracking</title>
+<!-- =========================================================
+         GOOGLE FONTS
+         ========================================================= -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=Playfair+Display:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ["Inter", "sans-serif"],
+                        dm: ["DM Sans", "sans-serif"],
+                        playfair: ["Playfair Display", "serif"]
+                    },
+                    colors: {
+                        loc8blue: "#087FEE",
+                        darkblue: "#071A31",
+                        softblue: "#D8EBFE",
+                        loc8orange: "#FF8A00",
+                        softorange: "#FBE6D6"
+                    }
+                }
+            }
+        };
+    </script>
+
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
+</head>
+<body class="w-full min-h-screen overflow-x-hidden bg-white font-inter">
+<!-- =========================================================
+         PAGE 1 — HOME
+         ========================================================= -->
+<section class="hero-page relative w-full min-h-screen h-screen overflow-visible bg-softblue" id="home">
+<div class='hero-photo absolute inset-0 bg-no-repeat bg-bottom bg-cover [background-image:url("./assets/CAR%20IMAGE.png")]'></div>
+<div class="hero-blue-wash absolute inset-0 [background:linear-gradient(to_bottom,rgba(216,235,254,.98)_0%,rgba(216,235,254,.96)_22%,rgba(216,235,254,.86)_40%,rgba(216,235,254,.56)_57%,rgba(216,235,254,0)_74%,rgba(0,0,0,0)_100%)]"></div>
+<div class="hero-image-fade absolute left-0 right-0 bottom-0 h-[40%] [background:linear-gradient(to_bottom,transparent_0%,rgba(216,235,254,.03)_30%,rgba(216,235,254,.22)_72%,rgba(216,235,254,.72)_100%)]"></div>
+<header class="hero-header absolute z-50 top-7 left-1/2 -translate-x-1/2 w-[min(766px,calc(100%-40px))] h-12 flex items-center px-[15px] bg-white">
+<a aria-label="Track Loc8 home" class="no-underline" href="#home">
+<img alt="Track Loc8" class="hero-logo block max-w-full w-[62px] h-[35px] object-contain shrink-0 max-[640px]:w-[58px]" src="./assets/logo%20image.png"/>
+</a>
+<button aria-controls="mobileMenu" aria-expanded="false" aria-label="Open navigation menu" class="hamburger font-[inherit] [-webkit-tap-highlight-color:transparent] hidden max-[900px]:flex ml-auto w-[34px] h-[34px] p-0 border-0 bg-transparent cursor-pointer items-center justify-center flex-col gap-1 z-[60]" id="hamburger" type="button">
+<span class="block w-[21px] h-[2px] bg-darkblue transition-all duration-300"></span>
+<span class="block w-[21px] h-[2px] bg-darkblue transition-all duration-300"></span>
+<span class="block w-[21px] h-[2px] bg-darkblue transition-all duration-300"></span>
+</button>
+<nav aria-label="Main navigation" class="hero-nav absolute left-1/2 -translate-x-1/2 flex items-center gap-6 h-full max-[900px]:hidden">
+<a class="active no-underline relative whitespace-nowrap text-[9px] text-[#424b58] transition-colors duration-200 hover:text-loc8blue text-loc8blue after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-[9px] after:w-6 after:h-[1.5px] after:bg-loc8blue" href="#home">Home</a>
+<a class="no-underline relative whitespace-nowrap text-[9px] text-[#424b58] transition-colors duration-200 hover:text-loc8blue" href="#about">About</a>
+<a class="no-underline relative whitespace-nowrap text-[9px] text-[#424b58] transition-colors duration-200 hover:text-loc8blue" href="#getting-started">Pricing</a>
+<a class="no-underline relative whitespace-nowrap text-[9px] text-[#424b58] transition-colors duration-200 hover:text-loc8blue" href="#contact">Contact Us</a>
+</nav>
+<div class="hero-actions ml-auto flex gap-[9px] max-[900px]:hidden">
+<a class="hero-action hero-action-primary no-underline w-[67px] h-[26px] flex items-center justify-center text-[8px] text-white bg-loc8blue" href="#getting-started">Get Started</a>
+<a class="hero-action hero-action-secondary no-underline w-[67px] h-[26px] flex items-center justify-center text-[8px] text-loc8blue border border-[#9bcfff] bg-white" href="#getting-started">Sign In</a>
+</div>
+<nav aria-label="Mobile navigation" class="mobile-menu absolute top-[58px] left-0 right-0 hidden flex-col p-[10px] bg-white shadow-[0_10px_25px_rgba(0,0,0,.12)] z-[55]" id="mobileMenu">
+<a class="active no-underline p-[12px_14px] text-[#424b58] text-[11px] border-b border-[#edf2f7] transition-colors duration-200 hover:text-loc8blue hover:bg-[#f3f8ff] text-loc8blue bg-[#f3f8ff]" href="#home">Home</a>
+<a class="no-underline p-[12px_14px] text-[#424b58] text-[11px] border-b border-[#edf2f7] transition-colors duration-200 hover:text-loc8blue hover:bg-[#f3f8ff]" href="#about">About</a>
+<a class="no-underline p-[12px_14px] text-[#424b58] text-[11px] border-b border-[#edf2f7] transition-colors duration-200 hover:text-loc8blue hover:bg-[#f3f8ff]" href="#getting-started">Pricing</a>
+<a class="no-underline p-[12px_14px] text-[#424b58] text-[11px] border-b border-[#edf2f7] transition-colors duration-200 hover:text-loc8blue hover:bg-[#f3f8ff]" href="#contact">Contact Us</a>
+<a class="no-underline p-[12px_14px] text-[#424b58] text-[11px] border-b border-[#edf2f7] transition-colors duration-200 hover:text-loc8blue hover:bg-[#f3f8ff]" href="#getting-started">Get Started</a>
+<a class="no-underline p-[12px_14px] text-[#424b58] text-[11px] border-b border-[#edf2f7] transition-colors duration-200 hover:text-loc8blue hover:bg-[#f3f8ff] border-b-0" href="#getting-started">Sign In</a>
+</nav>
+</header>
+<div class="hero-content absolute z-10 top-[114px] left-1/2 w-[min(650px,calc(100%-40px))] -translate-x-1/2 text-center">
+<h1 class="hero-title font-playfair text-[clamp(42px,4.7vw,58px)] leading-[.96] tracking-[-2.4px] font-medium text-[#101010] max-[640px]:text-[32px] max-[640px]:tracking-[-1.5px]">
+<span class="blue text-loc8blue">Smart tracking</span>
+                solutions
+                <br/>
+                for
+                <span class="blue text-loc8blue">your vehicle</span>
+</h1>
+<p class="hero-description mt-5 mx-auto max-w-[620px] text-[11px] leading-[1.55] text-[#596574] max-[640px]:text-[9px]">
+                Real-time GPS tracking that keeps your business moving forward.
+                Monitor, optimize,
+                <br class="max-[640px]:hidden"/>
+                and secure your vehicles with ease.
+            </p>
+<div class="hero-buttons flex justify-center gap-[10px] mt-[13px]">
+<a class="hero-button hero-button-primary no-underline min-w-[70px] h-[27px] px-[13px] flex items-center justify-center text-[8px] bg-loc8blue text-white" href="#getting-started">Get Started</a>
+<a class="hero-button hero-button-secondary no-underline min-w-[70px] h-[27px] px-[13px] flex items-center justify-center text-[8px] bg-white text-loc8blue border border-[#9bcfff]" href="#getting-started">Sign In</a>
+</div>
+</div>
+<div class="locator-footer locator-blue [--locator-line:transparent] absolute left-0 right-0 bottom-0 h-[34px] z-40 border-t-2 border-[#80bfff] bg-[#d8ebfe]">
+<div class="locator-pin absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[52px] h-[52px] rounded-full flex items-center justify-center bg-white shadow-[0_2px_8px_rgba(0,0,0,.12)]">
+<div class="locator-pin-inner w-10 h-10 rounded-full flex items-center justify-center bg-[#80bfff]">
+<svg aria-hidden="true" class="w-[22px] h-[28px]" fill="none" viewbox="0 0 40 48">
+<path d="M20 2C10.06 2 2 10.06 2 20C2 33.5 20 46 20 46C20 46 38 33.5 38 20C38 10.06 29.94 2 20 2Z" fill="#071A31"></path>
+<circle cx="20" cy="20" fill="#80BFFF" r="6"></circle>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- =========================================================
+         PAGE 2 — ABOUT
+         ========================================================= -->
+<section class="about-page relative w-full min-h-screen overflow-visible bg-white" id="about">
+<div class="about-inner w-[min(965px,calc(100%-40px))] min-h-screen mx-auto py-[70px] grid grid-cols-[.92fr_1.08fr] gap-[38px] items-center max-[900px]:w-[calc(100%-34px)] max-[900px]:grid-cols-1 max-[900px]:gap-7 max-[900px]:pt-[70px] max-[640px]:w-[calc(100%-28px)]">
+<div class="about-copy">
+<span class="about-eyebrow font-playfair -ml-20 text-loc8blue text-[18px] leading-none">Why Track Locate</span>
+<h2 class="about-heading mt-3 -ml-20 max-w-[540px] font-inter text-[clamp(38px,4.2vw,52px)] leading-[1.03] tracking-[-2.4px] font-bold bg-[linear-gradient(90deg,#071b32_0%,#0b3158_58%,#285f98_100%)] bg-clip-text text-transparent max-[640px]:text-[36px] max-[640px]:tracking-[-1.7px]">
+            Build a system that's yours
+                
+                </h2>
+<p class="about-description mt-[22px] -ml-20 max-w-[500px] font-inter text-[17px] leading-[1.5] tracking-[-.35px] text-[#697384] max-[640px]:text-[14px]">
+                    Manage your fleet in one place with real-time insights,
+                    AI-powered analytics, and seamless integration with your
+                    daily activities.
+                </p>
+</div>
+<div class="about-mosaic w-full grid grid-cols-[1.36fr_.96fr] grid-rows-[163px_163px] gap-[10px] max-[900px]:grid-rows-[150px_150px] max-[640px]:grid-cols-1 max-[640px]:grid-rows-auto">
+<div class="mosaic-item mosaic-large relative overflow-hidden [grid-column:1] [grid-row:1]">
+<img alt="Live GPS Tracking" class="block max-w-full w-full h-full object-cover" src="./assets/1st IMAGE.png"/>
+<div class="mosaic-caption gps-caption absolute left-0 right-0 bottom-0 p-[10px_12px] [background:linear-gradient(to_top,rgba(255,255,255,.94),transparent)]">
+<h3 class="text-[11px] font-bold text-[#087fee]">Live GPS Tracking.</h3>
+<p class="mt-0.5 text-[8px] leading-[1.35] text-[#222]">Know exactly where your vehicle is at all times.</p>
+</div>
+</div>
+<div class="mosaic-item mosaic-small-top relative overflow-hidden [grid-column:2] [grid-row:1]">
+<img alt="Route Optimization" class="block max-w-full w-full h-full object-cover" src="./assets/2nd IMAGE.png"/>
+<div class="mosaic-caption route-caption absolute left-0 right-0 bottom-0 p-[10px_12px] [background:linear-gradient(to_top,rgba(255,255,255,.94),transparent)]">
+<h3 class="text-[11px] font-bold text-[#ff8a00]">Route Optimization.</h3>
+<p class="mt-0.5 text-[8px] leading-[1.35] text-[#222]">Reduce fuel costs <br>
+    and improve delivery efficiency.</p>
+</div>
+</div>
+<div class="mosaic-item mosaic-small-bottom relative overflow-hidden [grid-column:1] [grid-row:2]">
+<img alt="Fleet Analytics" class="block max-w-full w-full h-full object-cover" src="./assets/3rd image.png"/>
+<div class="mosaic-caption analytics-caption absolute left-0 right-0 bottom-0 p-[10px_12px] [background:linear-gradient(to_top,rgba(255,255,255,.94),transparent)]">
+<h3 class="text-[11px] font-bold text-[#ffb000]">Route Optimization.</h3>
+<p class="mt-0.5 text-[8px] leading-[1.35] text-[#222]">Reduce fuel cost and improve delivery efficiency.</p>
+</div>
+</div>
+<div class="mosaic-item mosaic-large-bottom relative overflow-hidden [grid-column:2] [grid-row:2]">
+<img alt="Driver Monitoring" class="block max-w-full w-full h-full object-cover" src="./assets/4th image.png"/>
+<div class="mosaic-caption driver-caption absolute left-0 right-0 bottom-0 p-[10px_12px] [background:linear-gradient(to_top,rgba(255,255,255,.94),transparent)]">
+<h3 class="text-[11px] font-bold text-[#8c087f]">Driver Monitoring.</h3>
+<p class="mt-0.5 text-[8px] leading-[1.35] text-[#222]">Ensure safety with behavior analytics and alerts.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="locator-footer locator-orange [--locator-line:transparent] absolute left-0 right-0 bottom-0 h-[34px] z-40 border-t-2 border-[#ffb380] bg-[#fff8ef]">
+<div class="locator-pin absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[52px] h-[52px] rounded-full flex items-center justify-center bg-white shadow-[0_2px_8px_rgba(0,0,0,.12)]">
+<div class="locator-pin-inner w-10 h-10 rounded-full flex items-center justify-center bg-[#ffb777]">
+<svg aria-hidden="true" class="w-[22px] h-[28px]" fill="none" viewbox="0 0 40 48">
+<path d="M20 2C10.06 2 2 10.06 2 20C2 33.5 20 46 20 46C20 46 38 33.5 38 20C38 10.06 29.94 2 20 2Z" fill="#071A31"></path>
+<circle cx="20" cy="20" fill="#FFB380" r="6"></circle>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- =========================================================
+         PAGE 3 — FEATURES
+         ========================================================= -->
+<section class="features-page relative w-full min-h-screen bg-softorange flex justify-center" id="features">
+<div class="features-inner w-[min(813px,calc(100%-72px))] min-h-screen py-[52px] pb-[58px] flex flex-col items-center max-[640px]:w-[calc(100%-28px)]">
+<span class="features-eyebrow font-playfair text-loc8orange text-[18px] leading-none w-fit mx-auto text-center">Featured</span>
+<h2 class="features-heading mt-2 bg-[linear-gradient(90deg,#341B01_0%,#341B01_35%,#673602_65%,#A35E14_100%)] bg-clip-text text-transparent text-[20px] font-bold leading-[1.1] text-center">
+                Always on the know, always
+                <br/>
+                connected
+            </h2>
+<p class="features-subtitle mt-[10px] text-[9px] text-[#5e6470] text-center">
+                An intelligent tracking system designed for efficiency and security.
+            </p>
+<div class="features-grid w-full grid grid-cols-3 gap-[10px] mt-[26px] max-[900px]:grid-cols-1">
+<a class="feature-card no-underline h-[340px] overflow-hidden rounded-lg bg-[#ddd] max-[900px]:h-[280px]" href="your-page-1.html">
+<img alt="Geo-Fencing Alerts" class="feature-card-image block max-w-full w-full h-full object-cover transition-transform duration-[450ms] ease-[ease] hover:scale-[1.03] motion-reduce:transition-none" src="assets/GEO FENCING (2).png"/>
+</a>
+<a class="feature-card no-underline h-[340px] overflow-hidden rounded-lg bg-[#ddd] max-[900px]:h-[280px]" href="your-page-2.html">
+<img alt="AI-Powered Analytics" class="feature-card-image block max-w-full w-full h-full object-cover transition-transform duration-[450ms] ease-[ease] hover:scale-[1.03] motion-reduce:transition-none" src="assets/ANALYTICS.png"/>
+</a>
+<a class="feature-card no-underline h-[340px] overflow-hidden rounded-lg bg-[#ddd] max-[900px]:h-[280px]" href="your-page-3.html">
+<img alt="Health Reports" class="feature-card-image block max-w-full w-full h-full object-cover transition-transform duration-[450ms] ease-[ease] hover:scale-[1.03] motion-reduce:transition-none" src="assets/HEALTH.png"/>
+</a>
+</div>
+</div>
+<div class="locator-footer locator-brown [--locator-line:transparent] absolute left-0 right-0 bottom-0 h-[34px] z-40 border-t-2 border-[#8b5e3c] bg-[#f3e8df]">
+<div class="locator-pin absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[52px] h-[52px] rounded-full flex items-center justify-center bg-white shadow-[0_2px_8px_rgba(0,0,0,.12)]">
+<div class="locator-pin-inner w-10 h-10 rounded-full flex items-center justify-center bg-[#8b5e3c]">
+<svg aria-hidden="true" class="w-[22px] h-[28px]" fill="none" viewbox="0 0 40 48">
+<path d="M20 2C10.06 2 2 10.06 2 20C2 33.5 20 46 20 46C20 46 38 33.5 38 20C38 10.06 29.94 2 20 2Z" fill="#4A2B00"></path>
+<circle cx="20" cy="20" fill="#FFFFFF" r="6"></circle>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- =========================================================
+         PAGE 4 — PRICING / GETTING STARTED
+         Four slides:
+         C1 -> C2 -> Login -> C4
+         ========================================================= -->
+<section class="pricing-page relative w-full min-h-screen bg-[#020d19] text-white overflow-hidden" id="getting-started">
+<div aria-label="Track Loc8 getting started" aria-roledescription="carousel" class="pricing-carousel relative w-full h-[calc(100vh-34px)] overflow-hidden [touch-action:pan-y] outline-none" id="pricingCarousel" tabindex="0">
+<div class="pricing-track flex h-full w-full transition-transform duration-[720ms] ease-[cubic-bezier(.22,.61,.36,1)] will-change-transform motion-reduce:transition-none" id="pricingTrack">
+<!-- SLIDE 1 -->
+<article aria-label="Pricing slide 1" class="pricing-slide reference-slide shrink-0 w-full h-full min-w-full relative flex items-center justify-center overflow-hidden [flex-basis:100%] bg-[#020d19]">
+<img alt="Getting Started pricing card 1" class="block max-w-full w-full h-full object-contain object-center select-none [pointer-events:none] [-webkit-user-drag:none] max-[640px]:object-cover" draggable="false" src="assets/C1.png"/>
+</article>
+<!-- SLIDE 2 -->
+<article aria-label="Pricing slide 2" class="pricing-slide reference-slide shrink-0 w-full h-full min-w-full relative flex items-center justify-center overflow-hidden [flex-basis:100%] bg-[#020d19]">
+<img alt="Getting Started pricing card 2" class="block max-w-full w-full h-full object-contain object-center select-none [pointer-events:none] [-webkit-user-drag:none] max-[640px]:object-cover" draggable="false" src="assets/C2.png"/>
+</article>
+<!-- SLIDE 3 — LOGIN -->
+<article aria-label="Account login slide" class="pricing-slide live-slide shrink-0 w-full h-full min-w-full relative flex items-center justify-center overflow-hidden [flex-basis:100%] bg-[#020d19]">
+<div aria-hidden="true" class="live-line absolute left-[8.5%] top-0 bottom-0 w-[7px] bg-[#9b5200] max-[640px]:hidden"></div>
+<div aria-hidden="true" class="live-marker absolute left-[8.5%] top-[55%] -translate-x-1/2 -translate-y-1/2 w-[76px] h-[76px] rounded-full bg-loc8orange flex items-center justify-center z-[3] max-[640px]:hidden">
+<svg class="w-[45px] h-[45px]" fill="none" viewbox="0 0 80 80">
+<path d="M17 47L22 29C22.7 26.5 25 25 27.6 25H52.4C55 25 57.3 26.5 58 29L63 47" stroke="#6B3A00" stroke-linejoin="round" stroke-width="6"></path>
+<path d="M12 47H68V61H12V47Z" stroke="#6B3A00" stroke-width="6"></path>
+<circle cx="23" cy="61" fill="#6B3A00" r="5"></circle>
+<circle cx="57" cy="61" fill="#6B3A00" r="5"></circle>
+</svg>
+</div>
+<div class="live-copy absolute left-[13%] top-[51%] -translate-y-1/2 w-[43%] text-[30px] leading-[1.42] z-[2] max-[900px]:left-[7%] max-[900px]:w-[42%] max-[900px]:text-[20px] max-[640px]:left-[10%] max-[640px]:top-[18%] max-[640px]:w-[80%] max-[640px]:text-[18px] max-[640px]:text-center">
+<strong class="text-loc8orange">Set up your account details.</strong>
+                        Setup your vehicle, location and profile details.
+                    </div>
+<form class="login-card absolute right-[3.5%] top-[21%] w-[min(500px,39vw)] min-w-[360px] p-[34px_38px_28px] rounded-[22px] bg-[linear-gradient(145deg,#082746,#123655)] shadow-[0_20px_55px_rgba(0,0,0,.18)] z-[4] max-[900px]:right-[3%] max-[900px]:w-[47vw] max-[900px]:min-w-0 max-[640px]:top-[34%] max-[640px]:left-[5%] max-[640px]:right-[5%] max-[640px]:w-auto max-[640px]:p-[24px_20px]" id="loginForm">
+<div class="login-title text-center font-playfair text-[29px] text-[#e9edf1] max-[640px]:text-[24px]">Login to your account</div>
+<div class="login-subtitle text-center mt-2 text-[15px] text-[#e7eaed] max-[640px]:text-[12px]">Enter your details to login.</div>
+<div class="login-divider h-px bg-[rgba(203,222,240,.22)] my-[26px]"></div>
+<div class="field mb-[17px]">
+<label class="block mb-[7px] text-[14px] text-[#b7c1ca] max-[640px]:text-[12px]" for="loginEmail">Email Address</label>
+<input autocomplete="email" class="font-[inherit] w-full h-[45px] px-[13px] rounded-[5px] border border-[#315779] bg-[rgba(1,20,38,.35)] text-white outline-none text-[14px] placeholder:text-[#71879a] focus:border-loc8blue focus:ring-2 focus:ring-[rgba(8,127,238,.12)] max-[640px]:text-[12px]" id="loginEmail" placeholder="john.doe@email.com" required="" type="email"/>
+</div>
+<div class="field mb-[17px]">
+<label class="block mb-[7px] text-[14px] text-[#b7c1ca] max-[640px]:text-[12px]" for="loginPassword">Password</label>
+<div class="password-wrap relative">
+<input autocomplete="current-password" class="font-[inherit] w-full h-[45px] px-[13px] rounded-[5px] border border-[#315779] bg-[rgba(1,20,38,.35)] text-white outline-none text-[14px] placeholder:text-[#71879a] focus:border-loc8blue focus:ring-2 focus:ring-[rgba(8,127,238,.12)] max-[640px]:text-[12px] pr-[44px]" id="loginPassword" placeholder="•••••••••••" required="" type="password"/>
+<button aria-label="Show password" aria-pressed="false" class="password-toggle font-[inherit] [-webkit-tap-highlight-color:transparent] absolute right-[10px] top-1/2 -translate-y-1/2 w-7 h-7 grid place-items-center bg-transparent border-0 text-[#8fa8bd] cursor-pointer" id="passwordToggle" type="button">
+                                    ◉
+                                </button>
+</div>
+</div>
+<div class="login-row flex justify-between items-center mt-[6px] text-[12px] text-[#c7d2df] gap-[10px]">
+<label class="remember flex items-center gap-[7px]">
+<input class="font-[inherit] accent-[#087fee]" id="keepLoggedIn" type="checkbox"/>
+<span>Keep me logged in</span>
+</label>
+<button class="forgot font-[inherit] [-webkit-tap-highlight-color:transparent] bg-transparent border-0 text-loc8orange cursor-pointer" id="forgotPassword" type="button">
+                                Forgot password?
+                            </button>
+</div>
+<button class="login-submit font-[inherit] [-webkit-tap-highlight-color:transparent] w-full h-[45px] mt-[22px] border-0 rounded-full bg-[linear-gradient(90deg,#0d55a1,#087fee)] text-white cursor-pointer transition-all duration-200 hover:opacity-[.94] hover:-translate-y-px" type="submit">
+                            Login
+                        </button>
+<div aria-live="polite" class="login-message text-center mt-[10px] text-[12px] text-[#ffb777] min-h-4" id="loginMessage" role="status"></div>
+</form>
+</article>
+<!-- SLIDE 4 -->
+<article aria-label="Pricing slide 4" class="pricing-slide reference-slide shrink-0 w-full h-full min-w-full relative flex items-center justify-center overflow-hidden [flex-basis:100%] bg-[#020d19]">
+<img alt="Getting Started pricing card 4" class="block max-w-full w-full h-full object-contain object-center select-none [pointer-events:none] [-webkit-user-drag:none] max-[640px]:object-cover" draggable="false" src="assets/C4.png"/>
+</article>
+</div>
+<!-- DOTS -->
+<div aria-label="Pricing carousel navigation" class="pricing-dots" id="pricingDots">
+<button aria-current="true" aria-label="Go to pricing card 1" class="pricing-dot active font-[inherit] [-webkit-tap-highlight-color:transparent] w-[6px] h-[6px] rounded-full border-0 bg-[#31506f] cursor-pointer transition-all duration-200 bg-loc8blue scale-[1.2]" type="button"></button>
+<button aria-current="false" aria-label="Go to pricing card 2" class="pricing-dot font-[inherit] [-webkit-tap-highlight-color:transparent] w-[6px] h-[6px] rounded-full border-0 bg-[#31506f] cursor-pointer transition-all duration-200" type="button"></button>
+<button aria-current="false" aria-label="Go to login card" class="pricing-dot font-[inherit] [-webkit-tap-highlight-color:transparent] w-[6px] h-[6px] rounded-full border-0 bg-[#31506f] cursor-pointer transition-all duration-200" type="button"></button>
+<button aria-current="false" aria-label="Go to pricing card 4" class="pricing-dot font-[inherit] [-webkit-tap-highlight-color:transparent] w-[6px] h-[6px] rounded-full border-0 bg-[#31506f] cursor-pointer transition-all duration-200" type="button"></button>
+</div>
+</div>
+<div class="locator-footer locator-yellow [--locator-line:transparent] absolute left-0 right-0 bottom-0 h-[34px] z-40 border-t-2 border-[#ffb000] bg-black">
+<div class="locator-pin absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[52px] h-[52px] rounded-full flex items-center justify-center bg-white shadow-[0_2px_8px_rgba(0,0,0,.12)]">
+<div class="locator-pin-inner w-10 h-10 rounded-full flex items-center justify-center bg-[#ffb000]">
+<svg aria-hidden="true" class="w-[22px] h-[28px]" fill="none" viewbox="0 0 40 48">
+<path d="M20 2C10.06 2 2 10.06 2 20C2 33.5 20 46 20 46C20 46 38 33.5 38 20C38 10.06 29.94 2 20 2Z" fill="#4A2B00"></path>
+<circle cx="20" cy="20" fill="#FFC107" r="6"></circle>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- =========================================================
+         PAGE 5 — FAQ
+         ========================================================= -->
+<section class="faq-page relative min-h-screen bg-[#fff8e7] flex items-center" id="faq">
+<div class="faq-shell w-[min(1024px,calc(100%-34px))] mx-auto grid grid-cols-[1.2fr_.8fr] gap-6 items-center py-[52px] pb-[58px] max-[900px]:grid-cols-1 max-[640px]:w-[calc(100%-28px)] max-[640px]:pt-[46px]">
+<div class="faq-list flex flex-col gap-[10px]" id="faqList">
+<!-- FAQ 1 -->
+<div class="faq-item bg-white border border-[#dfe4ea] rounded-lg shadow-[0_1px_4px_rgba(0,0,0,.05)] overflow-hidden">
+<button aria-controls="faqAnswer1" aria-expanded="false" class="faq-question font-[inherit] [-webkit-tap-highlight-color:transparent] w-full min-h-[36px] px-3 flex items-center justify-between gap-[10px] border-0 bg-white text-[#0d1624] text-left text-[11px] cursor-pointer hover:bg-[#fffdf8] max-[640px]:text-[10px]" type="button">
+<span class="faq-left flex items-center gap-[9px] min-w-0">
+<!-- CUSTOM ICON IMAGE -->
+<span class="faq-icon w-[17px] h-[17px] shrink-0 text-[#4d5664] flex items-center justify-center">
+<img alt="Location icon" class="block max-w-full w-[16px] h-[16px] object-contain" src="assets/ICON 1.png"/>
+</span>
+<span>What is a vehicle tracking system, and how does it work?</span>
+</span>
+<span aria-hidden="true" class="faq-plus w-[18px] h-[18px] grid place-items-center shrink-0 text-[15px] leading-none text-[#8995a5] transition-all duration-200 motion-reduce:transition-none">+</span>
+</button>
+<div class="faq-answer max-h-0 overflow-hidden px-9 text-[#596273] text-[10px] leading-[1.5] transition-all duration-300 max-[640px]:pl-[38px] max-[640px]:pr-7 motion-reduce:transition-none" id="faqAnswer1">
+                    A vehicle tracking system uses GPS and connected tracking hardware
+                    to provide location and operational information in real time.
+                </div>
+</div>
+<!-- FAQ 2 -->
+<div class="faq-item bg-white border border-[#dfe4ea] rounded-lg shadow-[0_1px_4px_rgba(0,0,0,.05)] overflow-hidden">
+<button aria-controls="faqAnswer2" aria-expanded="false" class="faq-question font-[inherit] [-webkit-tap-highlight-color:transparent] w-full min-h-[36px] px-3 flex items-center justify-between gap-[10px] border-0 bg-white text-[#0d1624] text-left text-[11px] cursor-pointer hover:bg-[#fffdf8] max-[640px]:text-[10px]" type="button">
+<span class="faq-left flex items-center gap-[9px] min-w-0">
+<!-- CUSTOM ICON IMAGE -->
+<span class="faq-icon w-[17px] h-[17px] shrink-0 text-[#4d5664] flex items-center justify-center">
+<img alt="GPS icon" class="block max-w-full w-[16px] h-[16px] object-contain" src="assets/ICON 2.png"/>
+</span>
+<span>How accurate is the GPS tracking?</span>
+</span>
+<span aria-hidden="true" class="faq-plus w-[18px] h-[18px] grid place-items-center shrink-0 text-[15px] leading-none text-[#8995a5] transition-all duration-200 motion-reduce:transition-none">+</span>
+</button>
+<div class="faq-answer max-h-0 overflow-hidden px-9 text-[#596273] text-[10px] leading-[1.5] transition-all duration-300 max-[640px]:pl-[38px] max-[640px]:pr-7 motion-reduce:transition-none" id="faqAnswer2">
+                    Accuracy depends on satellite visibility and network conditions,
+                    but modern GPS tracking normally provides a highly precise
+                    vehicle position.
+                </div>
+</div>
+<!-- FAQ 3 -->
+<div class="faq-item bg-white border border-[#dfe4ea] rounded-lg shadow-[0_1px_4px_rgba(0,0,0,.05)] overflow-hidden">
+<button aria-controls="faqAnswer3" aria-expanded="false" class="faq-question font-[inherit] [-webkit-tap-highlight-color:transparent] w-full min-h-[36px] px-3 flex items-center justify-between gap-[10px] border-0 bg-white text-[#0d1624] text-left text-[11px] cursor-pointer hover:bg-[#fffdf8] max-[640px]:text-[10px]" type="button">
+<span class="faq-left flex items-center gap-[9px] min-w-0">
+<!-- CUSTOM ICON IMAGE -->
+<span class="faq-icon w-[17px] h-[17px] shrink-0 text-[#4d5664] flex items-center justify-center">
+<img alt="Fleet icon" class="block max-w-full w-[16px] h-[16px] object-contain" src="assets/ICON 3.png"/>
+</span>
+<span>Can I track multiple vehicles at the same time?</span>
+</span>
+<span aria-hidden="true" class="faq-plus w-[18px] h-[18px] grid place-items-center shrink-0 text-[15px] leading-none text-[#8995a5] transition-all duration-200 motion-reduce:transition-none">+</span>
+</button>
+<div class="faq-answer max-h-0 overflow-hidden px-9 text-[#596273] text-[10px] leading-[1.5] transition-all duration-300 max-[640px]:pl-[38px] max-[640px]:pr-7 motion-reduce:transition-none" id="faqAnswer3">
+                    Yes. Fleet plans can display and monitor multiple vehicles
+                    from one dashboard.
+                </div>
+</div>
+<!-- FAQ 4 -->
+<div class="faq-item bg-white border border-[#dfe4ea] rounded-lg shadow-[0_1px_4px_rgba(0,0,0,.05)] overflow-hidden">
+<button aria-controls="faqAnswer4" aria-expanded="false" class="faq-question font-[inherit] [-webkit-tap-highlight-color:transparent] w-full min-h-[36px] px-3 flex items-center justify-between gap-[10px] border-0 bg-white text-[#0d1624] text-left text-[11px] cursor-pointer hover:bg-[#fffdf8] max-[640px]:text-[10px]" type="button">
+<span class="faq-left flex items-center gap-[9px] min-w-0">
+<!-- CUSTOM ICON IMAGE -->
+<span class="faq-icon w-[17px] h-[17px] shrink-0 text-[#4d5664] flex items-center justify-center">
+<img alt="Globe icon" class="block max-w-full w-[16px] h-[16px] object-contain" src="assets/ICON 4.png"/>
+</span>
+<span>Does the system work internationally?</span>
+</span>
+<span aria-hidden="true" class="faq-plus w-[18px] h-[18px] grid place-items-center shrink-0 text-[15px] leading-none text-[#8995a5] transition-all duration-200 motion-reduce:transition-none">+</span>
+</button>
+<div class="faq-answer max-h-0 overflow-hidden px-9 text-[#596273] text-[10px] leading-[1.5] transition-all duration-300 max-[640px]:pl-[38px] max-[640px]:pr-7 motion-reduce:transition-none" id="faqAnswer4">
+                    Coverage depends on the tracker and network service available
+                    in the country where the vehicle operates.
+                </div>
+</div>
+<!-- FAQ 5 -->
+<div class="faq-item bg-white border border-[#dfe4ea] rounded-lg shadow-[0_1px_4px_rgba(0,0,0,.05)] overflow-hidden">
+<button aria-controls="faqAnswer5" aria-expanded="false" class="faq-question font-[inherit] [-webkit-tap-highlight-color:transparent] w-full min-h-[36px] px-3 flex items-center justify-between gap-[10px] border-0 bg-white text-[#0d1624] text-left text-[11px] cursor-pointer hover:bg-[#fffdf8] max-[640px]:text-[10px]" type="button">
+<span class="faq-left flex items-center gap-[9px] min-w-0">
+<!-- CUSTOM ICON IMAGE -->
+<span class="faq-icon w-[17px] h-[17px] shrink-0 text-[#4d5664] flex items-center justify-center">
+<img alt="Notification icon" class="block max-w-full w-[16px] h-[16px] object-contain" src="assets/ICON 5.png"/>
+</span>
+<span>Can I set up geofencing alerts?</span>
+</span>
+<span aria-hidden="true" class="faq-plus w-[18px] h-[18px] grid place-items-center shrink-0 text-[15px] leading-none text-[#8995a5] transition-all duration-200 motion-reduce:transition-none">+</span>
+</button>
+<div class="faq-answer max-h-0 overflow-hidden px-9 text-[#596273] text-[10px] leading-[1.5] transition-all duration-300 max-[640px]:pl-[38px] max-[640px]:pr-7 motion-reduce:transition-none" id="faqAnswer5">
+                    Yes. Geofencing can notify you when a tracked vehicle enters
+                    or leaves a defined area.
+                </div>
+</div>
+<!-- FAQ 6 -->
+<div class="faq-item bg-white border border-[#dfe4ea] rounded-lg shadow-[0_1px_4px_rgba(0,0,0,.05)] overflow-hidden">
+<button aria-controls="faqAnswer6" aria-expanded="false" class="faq-question font-[inherit] [-webkit-tap-highlight-color:transparent] w-full min-h-[36px] px-3 flex items-center justify-between gap-[10px] border-0 bg-white text-[#0d1624] text-left text-[11px] cursor-pointer hover:bg-[#fffdf8] max-[640px]:text-[10px]" type="button">
+<span class="faq-left flex items-center gap-[9px] min-w-0">
+<!-- CUSTOM ICON IMAGE -->
+<span class="faq-icon w-[17px] h-[17px] shrink-0 text-[#4d5664] flex items-center justify-center">
+<img alt="Route optimization icon" class="block max-w-full w-[16px] h-[16px] object-contain" src="assets/ICON 6.png"/>
+</span>
+<span>How does route optimization help my business?</span>
+</span>
+<span aria-hidden="true" class="faq-plus w-[18px] h-[18px] grid place-items-center shrink-0 text-[15px] leading-none text-[#8995a5] transition-all duration-200 motion-reduce:transition-none">+</span>
+</button>
+<div class="faq-answer max-h-0 overflow-hidden px-9 text-[#596273] text-[10px] leading-[1.5] transition-all duration-300 max-[640px]:pl-[38px] max-[640px]:pr-7 motion-reduce:transition-none" id="faqAnswer6">
+                    Route optimization helps reduce unnecessary mileage, fuel usage
+                    and delivery time while improving operational planning.
+                </div>
+</div>
+<!-- FAQ 7 -->
+<div class="faq-item bg-white border border-[#dfe4ea] rounded-lg shadow-[0_1px_4px_rgba(0,0,0,.05)] overflow-hidden">
+<button aria-controls="faqAnswer7" aria-expanded="false" class="faq-question font-[inherit] [-webkit-tap-highlight-color:transparent] w-full min-h-[36px] px-3 flex items-center justify-between gap-[10px] border-0 bg-white text-[#0d1624] text-left text-[11px] cursor-pointer hover:bg-[#fffdf8] max-[640px]:text-[10px]" type="button">
+<span class="faq-left flex items-center gap-[9px] min-w-0">
+<!-- CUSTOM ICON IMAGE -->
+<span class="faq-icon w-[17px] h-[17px] shrink-0 text-[#4d5664] flex items-center justify-center">
+<img alt="Driver monitoring icon" class="block max-w-full w-[16px] h-[16px] object-contain" src="assets/ICON 7.png"/>
+</span>
+<span>Is driver monitoring included in the system?</span>
+</span>
+<span aria-hidden="true" class="faq-plus w-[18px] h-[18px] grid place-items-center shrink-0 text-[15px] leading-none text-[#8995a5] transition-all duration-200 motion-reduce:transition-none">+</span>
+</button>
+<div class="faq-answer max-h-0 overflow-hidden px-9 text-[#596273] text-[10px] leading-[1.5] transition-all duration-300 max-[640px]:pl-[38px] max-[640px]:pr-7 motion-reduce:transition-none" id="faqAnswer7">
+                    Driver monitoring availability depends on the selected plan
+                    and the tracking hardware installed in the vehicle.
+                </div>
+</div>
+</div>
+<!-- FAQ RIGHT-SIDE TEXT -->
+<div class="faq-copy pl-0 max-[900px]:order-first max-[900px]:text-center">
+<div class="faq-kicker font-playfair text-[#FFC107] text-[12px]">
+                Frequently Asked Questions
+            </div>
+<h2 class="faq-title mt-[10px] text-[30px] leading-[1.08] font-bold max-w-[360px] bg-[linear-gradient(90deg,#341B01_0%,#814303_50%,#A35E14_100%)] bg-clip-text text-transparent max-[900px]:mx-auto max-[640px]:text-[25px]">
+                Your burning questions,
+                <br/>
+                answered
+            </h2>
+</div>
+</div>
+<div class="locator-footer locator-orange [--locator-line:transparent] absolute left-0 right-0 bottom-0 h-[34px] z-40 border-t-2 border-[#ffb380] bg-[#fff8ef]">
+<div class="locator-pin absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[52px] h-[52px] rounded-full flex items-center justify-center bg-white shadow-[0_2px_8px_rgba(0,0,0,.12)]">
+<div class="locator-pin-inner w-10 h-10 rounded-full flex items-center justify-center bg-[#ffb777]">
+<svg aria-hidden="true" class="w-[22px] h-[28px]" fill="none" viewbox="0 0 40 48">
+<path d="M20 2C10.06 2 2 10.06 2 20C2 33.5 20 46 20 46C20 46 38 33.5 38 20C38 10.06 29.94 2 20 2Z" fill="#4A2B00"></path>
+<circle cx="20" cy="20" fill="#FFB380" r="6"></circle>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- =========================================================
+         PAGE 6 — TESTIMONIALS
+         ========================================================= -->
+<section class="testimonials-page relative min-h-screen bg-white" id="contact">
+<div class="testimonial-shell w-[min(900px,calc(100%-70px))] mx-auto min-h-screen grid grid-cols-[.78fr_1.22fr] gap-[55px] items-center py-[60px] pb-[66px] max-[900px]:grid-cols-1 max-[900px]:gap-5 max-[900px]:pt-[70px] max-[900px]:w-[calc(100%-34px)] max-[640px]:w-[calc(100%-30px)]">
+<div class="testimonial-copy">
+<div class="testimonial-kicker font-playfair text-[12px] text-[#111]">Testimonials</div>
+<h2 class="testimonial-title mt-[10px] text-[28px] leading-[1.15] font-bold text-[#0b0b0b] max-w-[340px] max-[900px]:max-w-none max-[640px]:text-[24px]">
+                    Words from some of our customers
+                </h2>
+</div>
+<div class="testimonial-content">
+<div aria-label="Track Loc8 client testimonials" aria-roledescription="carousel" class="testimonial-viewport overflow-hidden w-full [touch-action:pan-y] outline-none" id="testimonialViewport" tabindex="0">
+<div class="testimonial-track flex transition-transform duration-[550ms] ease-[cubic-bezier(.22,.61,.36,1)] will-change-transform motion-reduce:transition-none" id="testimonialTrack">
+<article aria-label="Testimonial 1" class="testimonial-card shrink-0 p-[4px_0] min-w-full [flex-basis:100%]">
+<p class="testimonial-quote text-[16px] leading-[1.42] text-[#5b6270] max-w-[520px] max-[640px]:text-[14px]">
+                                
+                                Since implementing this tracking system,our <strong class="text-loc8orange font-medium">delivery times have improved significantly.</strong>
+                                The route Optimization feature help us<strong class="text-loc8orange font-medium"> avoid traffic and save fuel,</strong> and real-time tracking <strong class="text-loc8orange font-medium">keeps us in control at all times.</strong>Highlyrecomended
+                            </p>
+<div class="testimonial-author mt-[26px] text-[11px] text-[#111]">Michael.R. </div>
+<div class="testimonial-role mt-1 text-[9px] text-[#6d7581]">Logistics Manager</div>
+</article>
+<article aria-label="Testimonial 2" class="testimonial-card shrink-0 p-[4px_0] min-w-full [flex-basis:100%]">
+<p class="testimonial-quote text-[16px] leading-[1.42] text-[#5b6270] max-w-[520px] max-[640px]:text-[14px]">
+                                “The real-time tracking and alerts help us respond
+                                quickly whenever a vehicle moves outside its expected route.”
+                            </p>
+<div class="testimonial-author mt-[26px] text-[11px] text-[#111]">Operations Director</div>
+<div class="testimonial-role mt-1 text-[9px] text-[#6d7581]">Distribution Company</div>
+</article>
+<article aria-label="Testimonial 3" class="testimonial-card shrink-0 p-[4px_0] min-w-full [flex-basis:100%]">
+<p class="testimonial-quote text-[16px] leading-[1.42] text-[#5b6270] max-w-[520px] max-[640px]:text-[14px]">
+                                “We can monitor vehicles, review performance and make
+                                <strong class="text-loc8orange font-medium">better decisions</strong> from one system.”
+                            </p>
+<div class="testimonial-author mt-[26px] text-[11px] text-[#111]">Business Owner</div>
+<div class="testimonial-role mt-1 text-[9px] text-[#6d7581]">Fleet Services</div>
+</article>
+</div>
+</div>
+<div aria-label="Testimonial navigation" class="testimonial-dots flex gap-[5px] justify-start mt-[18px]" id="testimonialDots">
+<button aria-current="true" aria-label="Go to testimonial 1" class="testimonial-dot active font-[inherit] [-webkit-tap-highlight-color:transparent] w-[6px] h-[6px] border-0 rounded-full bg-[#bcdcff] cursor-pointer transition-all duration-200 bg-loc8blue scale-[1.2]" type="button"></button>
+<button aria-current="false" aria-label="Go to testimonial 2" class="testimonial-dot font-[inherit] [-webkit-tap-highlight-color:transparent] w-[6px] h-[6px] border-0 rounded-full bg-[#bcdcff] cursor-pointer transition-all duration-200" type="button"></button>
+<button aria-current="false" aria-label="Go to testimonial 3" class="testimonial-dot font-[inherit] [-webkit-tap-highlight-color:transparent] w-[6px] h-[6px] border-0 rounded-full bg-[#bcdcff] cursor-pointer transition-all duration-200" type="button"></button>
+</div>
+</div>
+</div>
+<div class="locator-footer locator-blue [--locator-line:transparent] absolute left-0 right-0 bottom-0 h-[34px] z-40 border-t-2 border-[#80bfff] bg-[#d8ebfe]">
+<div class="locator-pin absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[52px] h-[52px] rounded-full flex items-center justify-center bg-white shadow-[0_2px_8px_rgba(0,0,0,.12)]">
+<div class="locator-pin-inner w-10 h-10 rounded-full flex items-center justify-center bg-[#80bfff]">
+<svg aria-hidden="true" class="w-[22px] h-[28px]" fill="none" viewbox="0 0 40 48">
+<path d="M20 2C10.06 2 2 10.06 2 20C2 33.5 20 46 20 46C20 46 38 33.5 38 20C38 10.06 29.94 2 20 2Z" fill="#071A31"></path>
+<circle cx="20" cy="20" fill="#80BFFF" r="6"></circle>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- =========================================================
+         PAGE 7 — PRICING + FADED LIVE MAP
+         ========================================================= -->
+<section class="pricing-final-page relative min-h-screen overflow-hidden bg-[#dceeff] text-[#071b32] pb-[34px]" id="pricing">
+<div class="pricing-final-content relative z-20 w-[min(830px,calc(100%-48px))] mx-auto py-[48px] pb-[26px] text-center max-[900px]:w-[min(760px,calc(100%-34px))] max-[640px]:w-[calc(100%-26px)] max-[640px]:pt-[45px]">
+<div class="pricing-final-kicker font-playfair text-[10px] text-loc8blue mb-[7px]">Pricing</div>
+<h2 class="pricing-final-title font-inter text-[21px] leading-[1.08] font-bold text-[#08294c] max-[640px]:text-[19px]"> 
+                Always on the know, always<br/>connected 
+            </h2>
+<p class="pricing-final-subtitle mt-[10px] text-[9px] text-[#707986]"> 
+                An intelligent tracking system designed for efficiency and security. 
+            </p>
+<div class="pricing-cards grid grid-cols-3 gap-[10px] mt-[25px] text-left max-[900px]:grid-cols-3 max-[900px]:gap-2 max-[640px]:grid-cols-1 max-[640px]:gap-2">
+<article class="plan-card min-h-[192px] p-[14px_13px_12px] rounded-md bg-[rgba(255,255,255,.96)] shadow-[0_5px_18px_rgba(22,75,120,.05)] max-[900px]:min-h-[205px] max-[640px]:min-h-[185px]">
+<div class="plan-name min-h-[18px] flex items-center gap-[7px] text-[8px] text-[#244f7b]">Standard</div>
+<div class="plan-price mt-[5px] font-playfair text-[23px] leading-none text-[#34445a]">KES 1,000 <span class="font-inter text-[7px] text-inherit">per month</span></div>
+<a class="plan-button no-underline flex items-center justify-center h-[19px] mt-[17px] rounded-full bg-[#0788ff] text-white text-[7px] font-medium" href="#getting-started">Get Started</a>
+<div class="plan-rule h-px my-[15px] mb-[12px] bg-[#d7e3ef]"></div>
+<div class="plan-included text-[8px] font-semibold">What’s included:</div>
+<ul class="mt-2 pl-0 list-none text-[7px] leading-[1.9] text-[#667085]">
+<li>Single Vehicle Monitoring</li>
+<li>Driver Monitoring</li>
+<li>GPS Tracking for up to 50km</li>
+</ul>
+</article>
+<article class="plan-card plan-card-featured min-h-[192px] p-[14px_13px_12px] rounded-md bg-[rgba(255,255,255,.96)] shadow-[0_5px_18px_rgba(22,75,120,.05)] max-[900px]:min-h-[205px] max-[640px]:min-h-[185px] bg-[linear-gradient(145deg,#082b4d,#0d3b62)] text-white -translate-y-[14px] max-[640px]:translate-y-0">
+<div class="plan-topline min-h-[18px] flex items-center gap-[7px] text-[8px] text-[#244f7b] text-white"><span>Premium</span><span class="popular-badge border border-[rgba(255,255,255,.7)] rounded-full px-[5px] py-0.5 text-[6px]">Most Popular</span></div>
+<div class="plan-price mt-[5px] font-playfair text-[23px] leading-none text-[#34445a] text-white">KES 2,500 <span class="font-inter text-[7px] text-inherit">per month</span></div>
+<a class="plan-button no-underline flex items-center justify-center h-[19px] mt-[17px] rounded-full bg-[#0788ff] text-white text-[7px] font-medium" href="#getting-started">Get Started</a>
+<div class="plan-rule h-px my-[15px] mb-[12px] bg-[#d7e3ef] bg-[rgba(255,255,255,.28)]"></div>
+<div class="plan-included text-[8px] font-semibold">What’s included:</div>
+<ul class="mt-2 pl-0 list-none text-[7px] leading-[1.9] text-[#667085] text-[#dce8f2]">
+<li>Multiple Vehicle Monitoring</li>
+<li>Driver Monitoring</li>
+<li>GPS Tracking for up to 100km</li>
+</ul>
+</article>
+<article class="plan-card min-h-[192px] p-[14px_13px_12px] rounded-md bg-[rgba(255,255,255,.96)] shadow-[0_5px_18px_rgba(22,75,120,.05)] max-[900px]:min-h-[205px] max-[640px]:min-h-[185px]">
+<div class="plan-name min-h-[18px] flex items-center gap-[7px] text-[8px] text-[#244f7b]">Enterprise</div>
+<div class="plan-price mt-[5px] font-playfair text-[23px] leading-none text-[#34445a]">Custom</div>
+<a class="plan-button no-underline flex items-center justify-center h-[19px] mt-[17px] rounded-full bg-[#0788ff] text-white text-[7px] font-medium" href="#contact">Contact Sales</a>
+<div class="plan-rule h-px my-[15px] mb-[12px] bg-[#d7e3ef]"></div>
+<div class="plan-included text-[8px] font-semibold">What’s included:</div>
+<ul class="mt-2 pl-0 list-none text-[7px] leading-[1.9] text-[#667085]">
+<li>Single Vehicle Monitoring</li>
+<li>Driver Monitoring</li>
+<li>GPS Tracking for up to 50km</li>
+</ul>
+</article>
+</div>
+</div>
+<div aria-label="Faded live map of Nairobi" class="pricing-map-wrap relative h-[350px] overflow-hidden -mt-0.5 max-[640px]:h-[330px]">
+<div class="pricing-live-map absolute inset-0 z-0 opacity-[.27] [filter:saturate(.72)_contrast(.92)]" id="live-map"></div>
+<div class="map-fade-left absolute inset-0 z-[2] pointer-events-none [background:linear-gradient(90deg,#dceeff_0%,#dceeff_18%,rgba(220,238,255,.88)_42%,rgba(220,238,255,.46)_72%,rgba(220,238,255,.12)_100%)]"></div>
+<div class="map-fade-soft absolute inset-0 z-[3] pointer-events-none bg-[rgba(220,238,255,.18)]"></div>
+<div class="pricing-map-copy relative z-10 w-[min(390px,calc(100%-48px))] pt-[91px] ml-[max(48px,calc((100%-830px)/2))] text-left max-[900px]:ml-[8%] max-[640px]:w-[calc(100%-34px)] max-[640px]:ml-[17px] max-[640px]:pt-[76px]">
+<h3 class="font-playfair text-[35px] leading-[.95] font-medium tracking-[-1.2px] text-[#071b32] max-[640px]:text-[31px]"><span class="text-[#0085ff]">Keep tabs</span> on your <span class="text-[#0085ff]">car</span><br/>anywhere, anytime</h3>
+<p class="w-[300px] mt-[11px] text-[8px] leading-[1.55] text-[#667085] max-[640px]:w-[min(300px,100%)]">Real-time GPS tracking that keeps your business moving forward. Monitor, optimize, and secure your vehicles with ease.</p>
+<a class="no-underline inline-flex mt-3 px-[9px] py-[6px] bg-[#0788ff] text-white text-[7px]" href="#getting-started">Get Started for KES 1,000</a>
+</div>
+</div>
+<div aria-label="Page 7 locator" class="locator-footer locator-blue [--locator-line:transparent] absolute left-0 right-0 bottom-0 h-[34px] z-40 border-t-2 border-[#80bfff] bg-[#d8ebfe]">
+<div class="locator-pin absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 w-[52px] h-[52px] rounded-full flex items-center justify-center bg-white shadow-[0_2px_8px_rgba(0,0,0,.12)]">
+<div class="locator-pin-inner w-10 h-10 rounded-full flex items-center justify-center bg-[#80bfff]">
+<svg aria-hidden="true" class="w-[22px] h-[28px]" fill="none" viewbox="0 0 40 48">
+<path d="M20 2C10.06 2 2 10.06 2 20C2 33.5 20 46 20 46C20 46 38 33.5 38 20C38 10.06 29.94 2 20 2Z" fill="#071A31"></path>
+<circle cx="20" cy="20" fill="#80BFFF" r="6"></circle>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- =========================================================
+         FINAL SITE FOOTER — AFTER PAGE 7 PRICING + MAP LOCATOR
+         ========================================================= -->
+<footer aria-label="Track Loc8 website footer" class="site-footer relative w-full min-h-[240px] bg-[#020d19] text-white pt-[42px] border-t border-[rgba(128,191,255,.35)] max-[640px]:min-h-[220px] max-[640px]:pt-9">
+<div class="site-footer-inner w-[min(852px,calc(100%-70px))] min-h-[198px] mx-auto flex flex-col items-center max-[640px]:w-[calc(100%-30px)] max-[640px]:min-h-[184px]">
+<img alt="Track Loc8" class="site-footer-logo block max-w-full w-[76px] h-auto object-contain max-[640px]:w-[68px]" src="./assets/logo%20image.png"/>
+<div aria-hidden="true" class="site-footer-divider w-full h-px mt-[38px] bg-[rgba(177,199,220,.22)] max-[640px]:mt-[30px]"></div>
+<div class="site-footer-bottom w-full flex items-center justify-between gap-5 py-[22px] pb-6 max-[640px]:flex-col max-[640px]:items-start max-[640px]:gap-[14px] max-[640px]:pt-[18px]">
+<div class="site-footer-copy text-[11px] leading-[1.4] text-[#b8c2cd] max-[640px]:text-[10px]">© <span id="currentYear"></span> Track Loc8. All rights reserved.</div>
+<nav aria-label="Footer links" class="site-footer-links flex items-center gap-[14px]">
+<a class="no-underline text-[11px] text-[#b8c2cd] transition-colors duration-200 hover:text-[#80bfff] max-[640px]:text-[10px]" href="#home">Terms</a>
+<a class="no-underline text-[11px] text-[#b8c2cd] transition-colors duration-200 hover:text-[#80bfff] max-[640px]:text-[10px]" href="#home">Privacy</a>
+<a class="no-underline text-[11px] text-[#b8c2cd] transition-colors duration-200 hover:text-[#80bfff] max-[640px]:text-[10px]" href="#home">Cookies</a>
+</nav>
+</div>
+</div>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mapElement = document.getElementById("live-map");
+            if (!mapElement || typeof L === "undefined") return;
+
+            const map = L.map(mapElement, {
+                center: [-1.286389, 36.817223],
+                zoom: 13,
+                zoomControl: false,
+                attributionControl: true,
+                dragging: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: false,
+                touchZoom: false
+            });
+
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19
+            }).addTo(map);
+
+            const vehicleIcon = L.divIcon({
+                className: "live-map-marker",
+                html: '<span></span>',
+                iconSize: [18, 18],
+                iconAnchor: [9, 9]
+            });
+
+            const vehicleRoute = [
+                [-1.286389, 36.817223],
+                [-1.283000, 36.812000],
+                [-1.279500, 36.817500],
+                [-1.283500, 36.823000],
+                [-1.289000, 36.820500]
+            ];
+
+            L.polyline(vehicleRoute, {
+                color: "#087fee",
+                weight: 3,
+                opacity: 0.45,
+                dashArray: "7 8"
+            }).addTo(map);
+
+            const vehicleMarker = L.marker(vehicleRoute[0], {
+                icon: vehicleIcon,
+                title: "Track Loc8 vehicle"
+            }).addTo(map);
+
+            vehicleMarker.bindPopup('<strong>Track Loc8</strong><br>Vehicle location demo is updating live.');
+
+            let routeIndex = 0;
+            let animationFrame = null;
+            const MOVE_DURATION = 3500;
+
+            function animateVehicle(from, to, startedAt) {
+                const now = performance.now();
+                const progress = Math.min((now - startedAt) / MOVE_DURATION, 1);
+                const eased = progress < 0.5
+                    ? 2 * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+                const lat = from[0] + (to[0] - from[0]) * eased;
+                const lng = from[1] + (to[1] - from[1]) * eased;
+                vehicleMarker.setLatLng([lat, lng]);
+
+                if (progress < 1) {
+                    animationFrame = requestAnimationFrame(() =>
+                        animateVehicle(from, to, startedAt)
+                    );
+                    return;
+                }
+
+                routeIndex = (routeIndex + 1) % vehicleRoute.length;
+                const nextPoint = vehicleRoute[routeIndex];
+                animationFrame = requestAnimationFrame(() =>
+                    animateVehicle(to, nextPoint, performance.now())
+                );
+            }
+
+            animationFrame = requestAnimationFrame(() =>
+                animateVehicle(vehicleRoute[0], vehicleRoute[1], performance.now())
+            );
+
+            window.addEventListener("beforeunload", () => {
+                if (animationFrame) cancelAnimationFrame(animationFrame);
+            });
+
+            setTimeout(() => map.invalidateSize(), 150);
+            window.addEventListener("resize", () => map.invalidateSize());
+        });
+    </script>
+<!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            /* =====================================================
+               AUTOMATIC COPYRIGHT YEAR
+               ===================================================== */
+            const currentYear = document.getElementById("currentYear");
+            if (currentYear) {
+                currentYear.textContent = new Date().getFullYear();
+            }
+
+            /* =====================================================
+               MOBILE NAVIGATION
+               ===================================================== */
+            const hamburger = document.getElementById("hamburger");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            if (hamburger && mobileMenu) {
+                hamburger.addEventListener("click", () => {
+                    const isOpen = mobileMenu.classList.toggle("open");
+                    mobileMenu.classList.toggle("hidden", !isOpen);
+                    mobileMenu.classList.toggle("flex", isOpen);
+
+                    hamburger.classList.toggle("active", isOpen);
+                    const bars = hamburger.querySelectorAll("span");
+                    if (bars.length === 3) {
+                        bars[0].classList.toggle("translate-y-[6px]", isOpen);
+                        bars[0].classList.toggle("rotate-45", isOpen);
+                        bars[1].classList.toggle("opacity-0", isOpen);
+                        bars[2].classList.toggle("-translate-y-[6px]", isOpen);
+                        bars[2].classList.toggle("-rotate-45", isOpen);
+                    }
+                    hamburger.setAttribute("aria-expanded", String(isOpen));
+                    hamburger.setAttribute(
+                        "aria-label",
+                        isOpen ? "Close navigation menu" : "Open navigation menu"
+                    );
+                });
+
+                mobileMenu.querySelectorAll("a").forEach(link => {
+                    link.addEventListener("click", () => {
+                        mobileMenu.classList.remove("open");
+                        mobileMenu.classList.add("hidden");
+                        mobileMenu.classList.remove("flex");
+                        hamburger.classList.remove("active");
+                        const bars = hamburger.querySelectorAll("span");
+                        if (bars.length === 3) {
+                            bars[0].classList.remove("translate-y-[6px]", "rotate-45");
+                            bars[1].classList.remove("opacity-0");
+                            bars[2].classList.remove("-translate-y-[6px]", "-rotate-45");
+                        }
+                        hamburger.setAttribute("aria-expanded", "false");
+                        hamburger.setAttribute("aria-label", "Open navigation menu");
+                    });
+                });
+            }
+
+            /* =====================================================
+               PAGE 4 — PRICING CAROUSEL
+               Corrected implementation:
+               - Exactly one 100% slide is visible.
+               - C1 -> C2 -> Login -> C4.
+               - Smooth transform animation.
+               - Previous/Next controls.
+               - Dot navigation.
+               - 6-second autoplay.
+               - Autoplay pauses on hover/focus.
+               - Autoplay pauses when the page is hidden.
+               - Pointer/touch/mouse swipe support.
+               - Login controls do NOT trigger dragging.
+               - Keyboard ArrowLeft/ArrowRight support.
+               - Resizing keeps the current slide aligned.
+               ===================================================== */
+            const pricingCarousel = document.getElementById("pricingCarousel");
+            const pricingTrack = document.getElementById("pricingTrack");
+            const pricingSlides = pricingTrack
+                ? Array.from(pricingTrack.querySelectorAll(".pricing-slide"))
+                : [];
+            const pricingDots = Array.from(
+                document.querySelectorAll("#pricingDots .pricing-dot")
+            );
+
+            let pricingIndex = 0;
+            let pricingTimer = null;
+            let pricingStartX = 0;
+            let pricingCurrentX = 0;
+            let pricingDragging = false;
+            let pricingPointerId = null;
+
+            const PRICING_AUTOPLAY_MS = 6000;
+            const PRICING_SWIPE_THRESHOLD = 50;
+
+            function updatePricingCarousel(animate = true) {
+                if (!pricingTrack || !pricingSlides.length) return;
+
+                pricingTrack.style.transition = animate
+                    ? "transform .72s cubic-bezier(.22,.61,.36,1)"
+                    : "none";
+
+                pricingTrack.style.transform =
+                    `translate3d(-${pricingIndex * 100}%, 0, 0)`;
+
+                pricingDots.forEach((dot, index) => {
+                    const active = index === pricingIndex;
+
+                    dot.classList.toggle("active", active);
+                    dot.classList.toggle("bg-loc8blue", active);
+                    dot.classList.toggle("scale-[1.2]", active);
+                    dot.setAttribute("aria-current", active ? "true" : "false");
+                });
+            }
+
+            function goToPricingSlide(index) {
+                if (!pricingSlides.length) return;
+
+                pricingIndex =
+                    (index + pricingSlides.length) % pricingSlides.length;
+
+                updatePricingCarousel(true);
+            }
+
+            function nextPricingSlide() {
+                goToPricingSlide(pricingIndex + 1);
+            }
+
+            function previousPricingSlide() {
+                goToPricingSlide(pricingIndex - 1);
+            }
+
+            function stopPricingAutoplay() {
+                if (pricingTimer !== null) {
+                    clearInterval(pricingTimer);
+                    pricingTimer = null;
+                }
+            }
+
+            function startPricingAutoplay() {
+                stopPricingAutoplay();
+
+                if (
+                    pricingSlides.length < 2 ||
+                    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                ) {
+                    return;
+                }
+
+                pricingTimer = setInterval(() => {
+                    if (!document.hidden && !pricingDragging) {
+                        nextPricingSlide();
+                    }
+                }, PRICING_AUTOPLAY_MS);
+            }
+
+            pricingDots.forEach((dot, index) => {
+                dot.addEventListener("click", () => {
+                    goToPricingSlide(index);
+                    startPricingAutoplay();
+                });
+            });
+
+            if (pricingCarousel) {
+
+                /* Pause when mouse is over the carousel. */
+                pricingCarousel.addEventListener("mouseenter", stopPricingAutoplay);
+
+                pricingCarousel.addEventListener("mouseleave", () => {
+                    if (!pricingDragging && !pricingCarousel.contains(document.activeElement)) {
+                        startPricingAutoplay();
+                    }
+                });
+
+                /* Pause while any carousel control/form element has focus. */
+                pricingCarousel.addEventListener("focusin", stopPricingAutoplay);
+
+                pricingCarousel.addEventListener("focusout", event => {
+                    const nextFocusedElement = event.relatedTarget;
+
+                    if (
+                        !nextFocusedElement ||
+                        !pricingCarousel.contains(nextFocusedElement)
+                    ) {
+                        startPricingAutoplay();
+                    }
+                });
+
+                /* Keyboard navigation. */
+                pricingCarousel.addEventListener("keydown", event => {
+                    if (event.key === "ArrowRight") {
+                        event.preventDefault();
+                        nextPricingSlide();
+                        startPricingAutoplay();
+                    }
+
+                    if (event.key === "ArrowLeft") {
+                        event.preventDefault();
+                        previousPricingSlide();
+                        startPricingAutoplay();
+                    }
+                });
+
+                /* =================================================
+                   POINTER / TOUCH / MOUSE SWIPE
+                   ================================================= */
+                pricingCarousel.addEventListener("pointerdown", event => {
+
+                    /* Never drag when interacting with controls/forms/links. */
+                    if (event.target.closest("button, input, label, form, a")) {
+                        return;
+                    }
+
+                    pricingDragging = true;
+                    pricingPointerId = event.pointerId;
+                    pricingStartX = event.clientX;
+                    pricingCurrentX = event.clientX;
+
+                    pricingTrack.classList.add("cursor-grabbing", "!transition-none");
+                    stopPricingAutoplay();
+
+                    try {
+                        pricingCarousel.setPointerCapture(event.pointerId);
+                    } catch (_) {}
+                });
+
+                pricingCarousel.addEventListener("pointermove", event => {
+                    if (!pricingDragging || event.pointerId !== pricingPointerId) {
+                        return;
+                    }
+
+                    pricingCurrentX = event.clientX;
+
+                    const deltaX = pricingCurrentX - pricingStartX;
+                    const percentage =
+                        (deltaX / pricingCarousel.clientWidth) * 100;
+
+                    const base = pricingIndex * 100;
+
+                    pricingTrack.style.transition = "none";
+                    pricingTrack.style.transform =
+                        `translate3d(calc(-${base}% + ${percentage}%), 0, 0)`;
+                });
+
+                const finishPricingDrag = event => {
+                    if (
+                        !pricingDragging ||
+                        (event.pointerId !== undefined &&
+                         event.pointerId !== pricingPointerId)
+                    ) {
+                        return;
+                    }
+
+                    const deltaX = pricingCurrentX - pricingStartX;
+
+                    pricingDragging = false;
+                    pricingTrack.classList.remove("cursor-grabbing", "!transition-none");
+
+                    if (Math.abs(deltaX) >= PRICING_SWIPE_THRESHOLD) {
+                        if (deltaX < 0) {
+                            nextPricingSlide();
+                        } else {
+                            previousPricingSlide();
+                        }
+                    } else {
+                        updatePricingCarousel(true);
+                    }
+
+                    try {
+                        pricingCarousel.releasePointerCapture(pricingPointerId);
+                    } catch (_) {}
+
+                    pricingPointerId = null;
+                    startPricingAutoplay();
+                };
+
+                pricingCarousel.addEventListener("pointerup", finishPricingDrag);
+                pricingCarousel.addEventListener("pointercancel", finishPricingDrag);
+            }
+
+            /* Keep current pricing slide correctly aligned after resize. */
+            window.addEventListener("resize", () => {
+                updatePricingCarousel(false);
+            });
+
+            /* Stop autoplay when the browser tab is hidden. */
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    stopPricingAutoplay();
+                } else {
+                    startPricingAutoplay();
+                }
+            });
+
+            updatePricingCarousel(false);
+            startPricingAutoplay();
+
+            /* =====================================================
+               PASSWORD SHOW / HIDE
+               ===================================================== */
+            const passwordToggle = document.getElementById("passwordToggle");
+            const loginPassword = document.getElementById("loginPassword");
+
+            if (passwordToggle && loginPassword) {
+                passwordToggle.addEventListener("click", () => {
+                    const showing = loginPassword.type === "text";
+
+                    loginPassword.type = showing ? "password" : "text";
+
+                    passwordToggle.setAttribute(
+                        "aria-label",
+                        showing ? "Show password" : "Hide password"
+                    );
+
+                    passwordToggle.setAttribute(
+                        "aria-pressed",
+                        String(!showing)
+                    );
+                });
+            }
+
+            /* =====================================================
+               LOGIN DEMO
+               Front-end demonstration only.
+               Replace this handler with your real authentication API.
+               ===================================================== */
+            const loginForm = document.getElementById("loginForm");
+            const loginMessage = document.getElementById("loginMessage");
+
+            if (loginForm && loginMessage) {
+                loginForm.addEventListener("submit", event => {
+                    event.preventDefault();
+
+                    const email =
+                        document.getElementById("loginEmail").value.trim();
+
+                    const password =
+                        document.getElementById("loginPassword").value;
+
+                    if (!email || !password) {
+                        loginMessage.textContent =
+                            "Please enter your email and password.";
+                        return;
+                    }
+
+                    loginMessage.textContent =
+                        "Login details received.";
+                });
+            }
+
+            const forgotPassword = document.getElementById("forgotPassword");
+
+            if (forgotPassword && loginMessage) {
+                forgotPassword.addEventListener("click", () => {
+                    const email =
+                        document.getElementById("loginEmail").value.trim();
+
+                    if (email) {
+                        loginMessage.textContent =
+                            `Password reset instructions will be sent to ${email}.`;
+                    } else {
+                        loginMessage.textContent =
+                            "Enter your email address to reset your password.";
+                    }
+                });
+            }
+
+            /* =====================================================
+               PAGE 5 — FAQ ACCORDION
+               Only one FAQ opens at a time.
+               aria-expanded is kept synchronized with the visual state.
+               ===================================================== */
+            document.querySelectorAll(".faq-item").forEach(item => {
+                const question = item.querySelector(".faq-question");
+
+                if (!question) return;
+
+                question.addEventListener("click", () => {
+                    const wasOpen = item.classList.contains("open");
+
+                    document.querySelectorAll(".faq-item.open").forEach(openItem => {
+                        openItem.classList.remove("open");
+                        const openPlus = openItem.querySelector(".faq-plus");
+                        const openAnswer = openItem.querySelector(".faq-answer");
+                        if (openPlus) openPlus.classList.remove("rotate-[45deg]", "text-loc8blue");
+                        if (openAnswer) { openAnswer.classList.remove("max-h-[120px]", "pb-[11px]"); }
+
+                        const openQuestion =
+                            openItem.querySelector(".faq-question");
+
+                        if (openQuestion) {
+                            openQuestion.setAttribute("aria-expanded", "false");
+                        }
+                    });
+
+                    if (!wasOpen) {
+                        item.classList.add("open");
+                        const plus = item.querySelector(".faq-plus");
+                        const answer = item.querySelector(".faq-answer");
+                        if (plus) plus.classList.add("rotate-[45deg]", "text-loc8blue");
+                        if (answer) answer.classList.add("max-h-[120px]", "pb-[11px]");
+                        question.setAttribute("aria-expanded", "true");
+                    }
+                });
+            });
+
+            /* =====================================================
+               PAGE 6 — TESTIMONIAL CAROUSEL
+               ===================================================== */
+            const testimonialTrack =
+                document.getElementById("testimonialTrack");
+
+            const testimonialCards = testimonialTrack
+                ? Array.from(
+                    testimonialTrack.querySelectorAll(".testimonial-card")
+                )
+                : [];
+
+            const testimonialDots = Array.from(
+                document.querySelectorAll(
+                    "#testimonialDots .testimonial-dot"
+                )
+            );
+
+            const testimonialViewport =
+                document.getElementById("testimonialViewport");
+
+            let testimonialIndex = 0;
+            let testimonialStartX = 0;
+            let testimonialCurrentX = 0;
+            let testimonialDragging = false;
+            let testimonialPointerId = null;
+
+            const TESTIMONIAL_SWIPE_THRESHOLD = 45;
+
+            function updateTestimonials(animate = true) {
+                if (!testimonialTrack) return;
+
+                testimonialTrack.style.transition = animate
+                    ? "transform .55s cubic-bezier(.22,.61,.36,1)"
+                    : "none";
+
+                testimonialTrack.style.transform =
+                    `translate3d(-${testimonialIndex * 100}%, 0, 0)`;
+
+                testimonialDots.forEach((dot, index) => {
+                    const active = index === testimonialIndex;
+
+                    dot.classList.toggle("active", active);
+                    dot.classList.toggle("bg-loc8blue", active);
+                    dot.classList.toggle("scale-[1.2]", active);
+                    dot.setAttribute(
+                        "aria-current",
+                        active ? "true" : "false"
+                    );
+                });
+            }
+
+            function goToTestimonial(index) {
+                if (!testimonialCards.length) return;
+
+                testimonialIndex =
+                    (index + testimonialCards.length) %
+                    testimonialCards.length;
+
+                updateTestimonials(true);
+            }
+
+            testimonialDots.forEach((dot, index) => {
+                dot.addEventListener("click", () => {
+                    goToTestimonial(index);
+                });
+            });
+
+            if (testimonialViewport && testimonialTrack) {
+
+                testimonialViewport.addEventListener("keydown", event => {
+                    if (event.key === "ArrowRight") {
+                        event.preventDefault();
+                        goToTestimonial(testimonialIndex + 1);
+                    }
+
+                    if (event.key === "ArrowLeft") {
+                        event.preventDefault();
+                        goToTestimonial(testimonialIndex - 1);
+                    }
+                });
+
+                testimonialViewport.addEventListener("pointerdown", event => {
+                    /* Buttons are outside the viewport, but keep this safe. */
+                    if (event.target.closest("button, input, a, form")) {
+                        return;
+                    }
+
+                    testimonialDragging = true;
+                    testimonialPointerId = event.pointerId;
+                    testimonialStartX = event.clientX;
+                    testimonialCurrentX = event.clientX;
+
+                    testimonialTrack.classList.add("cursor-grabbing", "!transition-none");
+
+                    try {
+                        testimonialViewport.setPointerCapture(event.pointerId);
+                    } catch (_) {}
+                });
+
+                testimonialViewport.addEventListener("pointermove", event => {
+                    if (
+                        !testimonialDragging ||
+                        event.pointerId !== testimonialPointerId
+                    ) {
+                        return;
+                    }
+
+                    testimonialCurrentX = event.clientX;
+
+                    const deltaX =
+                        testimonialCurrentX - testimonialStartX;
+
+                    const percentage =
+                        (deltaX / testimonialViewport.clientWidth) * 100;
+
+                    const base = testimonialIndex * 100;
+
+                    testimonialTrack.style.transition = "none";
+                    testimonialTrack.style.transform =
+                        `translate3d(calc(-${base}% + ${percentage}%), 0, 0)`;
+                });
+
+                const finishTestimonialDrag = event => {
+                    if (
+                        !testimonialDragging ||
+                        (event.pointerId !== undefined &&
+                         event.pointerId !== testimonialPointerId)
+                    ) {
+                        return;
+                    }
+
+                    const deltaX =
+                        testimonialCurrentX - testimonialStartX;
+
+                    testimonialDragging = false;
+                    testimonialTrack.classList.remove("cursor-grabbing", "!transition-none");
+
+                    if (Math.abs(deltaX) >= TESTIMONIAL_SWIPE_THRESHOLD) {
+                        if (deltaX < 0) {
+                            goToTestimonial(testimonialIndex + 1);
+                        } else {
+                            goToTestimonial(testimonialIndex - 1);
+                        }
+                    } else {
+                        updateTestimonials(true);
+                    }
+
+                    try {
+                        testimonialViewport.releasePointerCapture(
+                            testimonialPointerId
+                        );
+                    } catch (_) {}
+
+                    testimonialPointerId = null;
+                };
+
+                testimonialViewport.addEventListener(
+                    "pointerup",
+                    finishTestimonialDrag
+                );
+
+                testimonialViewport.addEventListener(
+                    "pointercancel",
+                    finishTestimonialDrag
+                );
+            }
+
+            updateTestimonials(false);
+        });
+    </script>
+</body>
+</html>
